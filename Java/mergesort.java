@@ -1,55 +1,52 @@
-class test {
-public static void divide(int arr[],int si,int ei)
-    {
-        if(si>=ei)
-            return;
-        int mid=(si+ei)/2;
-        divide(arr,si,mid);
-        divide(arr,mid+1,ei);
-        conquer(arr,si,mid,ei);
-    }
-    public static void conquer(int arr[],int si,int mid,int ei)
-    {
-        int merged[] = new int[ei-si+1];
-        int idx1=si;
-        int idx2=mid+1;
-        int x=0;
-        while(idx1<=mid && idx2<=ei)
-        {
-            if(arr[idx1]<=arr[idx2])
-            {
-                merged[x++]=arr[idx1++];
-            }
-            else
-            {
-                merged[x++]=arr[idx2++];
-            }
-        }
-        while(idx1<=mid)
-        {
-            merged[x++]=arr[idx1++];
-        }
-        while(idx2<=ei)
-        {
-            merged[x++]=arr[idx2++];
-        }
-        for(int i=0, j=si;i< merged.length;i++,j++)
-        {
-            arr[j]=merged[i];
-        }
 
+import java.util.Arrays;
+
+public class MergeSort {
+    public static void main(String[] args) {
+        int[] arr = {5,4,3,2,1};
+        arr = mergeSort(arr);
+        System.out.println(Arrays.toString(arr));
+    }
+    static int[] mergeSort(int[] arr){
+
+        if (arr.length == 1)
+            return arr;
+
+        int mid = arr.length / 2;
+
+        int[] left = mergeSort(Arrays.copyOfRange(arr,0,mid));
+        int[] right = mergeSort(Arrays.copyOfRange(arr,mid,arr.length));
+
+        return merge(left,right);
     }
 
-public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int arr[] = {6,3,9,5,2,8};
-        int n=arr.length -1;
-        
-        divide(arr,0,n);
-        
-        for(int i=0;i<arr.length;i++)
-        {
-            System.out.print(arr[i]+" ");
+    static int[] merge(int[] first, int[] second) {
+        int[] mix = new int[first.length + second.length];
+        int i = 0;
+        int j = 0;
+        int k = 0;
+        while (i < first.length && j < second.length){
+            if (first[i] < second[j]){
+                mix[k] = first[i];
+                i++;
+            } else {
+                mix[k] = second[j];
+                j++;
+            }
+            k++;
         }
-}
+        // for the remaining part of the array
+        while (i < first.length){
+            mix[k] = first[i];
+            i++;
+            k++;
+        }
+        while (j < second.length){
+            mix[k] = second[j];
+            j++;
+            k++;
+        }
+
+        return mix;
+    }
 }
